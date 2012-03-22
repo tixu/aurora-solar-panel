@@ -1,0 +1,15 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET     /                           controllers.Application.index
+GET     /measures                   controllers.Measures.index
+GET     /measures/list              controllers.Measures.list
+
+
+GET     /measures/display           controllers.Measures.display
+GET     /measures/year/:year        controllers.Measures.sumMonth(year :Int)
+GET     /measures/year/:year/month/:month  controllers.Measures.displayMonth(month :Int, year:Int)
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.at(path="/public", file)

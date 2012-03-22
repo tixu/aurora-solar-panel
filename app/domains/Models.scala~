@@ -1,0 +1,44 @@
+package models
+
+import java.util.{Date}
+
+import play.api.db._
+import play.api.Play.current
+
+import anorm._
+import anorm.SqlParser._
+
+
+  
+case class Measure(taken : Pk[Date], produced: Long,unity: String)
+
+object Measure {
+
+  /**
+   * Parse a Computer from a ResultSet
+   */
+  val simple = {
+    get[Pk[Date]]("measure.taken") ~
+    get[Date]("measure.produced") ~
+    get[Long]("measure.unity")  map {
+      case taken~produced~unity => Measure(
+        taken,produced,unity
+      )
+    }
+  }
+
+
+   def findById(id: Long): Option[Measure] = {
+		 DB.withConnection { implicit connection =>
+         SQL("select * from measure where id = {id}").on('id -> id).as(Measure.simple.singleOpt)
+        }
+	}
+	
+
+    def findAll(): Seq[Measure] = {
+             DB.withConnection { implicit connection =>
+                        SQL("select * from measure").as(Measure.simple *)
+    }
+  }
+
+}
